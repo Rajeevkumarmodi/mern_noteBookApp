@@ -1,6 +1,11 @@
 import mongoose, { Schema, model } from "mongoose";
+const { ObjectId } = mongoose.Schema.Types;
 
 const noteSchema = new Schema({
+  user: {
+    type: ObjectId,
+    ref: "user",
+  },
   title: {
     type: String,
     requirde: true,
@@ -9,14 +14,9 @@ const noteSchema = new Schema({
     type: String,
     required: true,
   },
-  tag: {
-    type: String,
-    default: "General",
-  },
   date: {
     type: Date,
-    default: Date,
-    now,
+    default: Date.now,
   },
 });
 
