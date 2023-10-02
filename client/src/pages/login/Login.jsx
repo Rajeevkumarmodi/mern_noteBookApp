@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import Loading from "../../components/loading/Loading";
+import MyContext from "../../context/myContext";
 
+// ===============================login page===============================
 function Login() {
+  const { isLoding, setIsLoding } = useContext(MyContext);
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
   });
+
+  // ==============================changeHandler function==============================
 
   function changeHandler(e) {
     const name = e.target.name;
@@ -16,7 +22,8 @@ function Login() {
     setInputValue({ ...inputValue, [name]: value });
   }
 
-  async function signUp(e) {
+  // ================================login function================================
+  async function login(e) {
     e.preventDefault();
     const { name, email, password } = inputValue;
 
@@ -24,6 +31,7 @@ function Login() {
       toast.error("All fields are required");
     } else {
       try {
+        setIsLoding(true);
         const res = await fetch("http://localhost:8080/api/auth/login", {
           method: "POST",
           headers: {
@@ -33,13 +41,14 @@ function Login() {
         });
 
         const loginData = await res.json();
-        console.log(loginData);
         if (loginData.success) {
           toast.success(loginData.success);
-          setTimeout(() => navigate("/"), 500);
+          navigate("/");
           localStorage.setItem("token", loginData.token);
+          setIsLoding(false);
         } else {
           toast.error(loginData.error);
+          setIsLoding(false);
         }
       } catch (error) {
         console.log(error);
@@ -69,14 +78,14 @@ function Login() {
             value={inputValue.password}
           />
           <button
-            onClick={signUp}
+            onClick={login}
             className=" bg-green-600 py-1 rounded-xl font-bold
            text-white text-xl shadow-md shadow-black"
           >
             Login
           </button>
           <p>
-            I don't have a account{" "}
+            I don't have an account{" "}
             <Link to="/signup" className=" font-bold text-green-600">
               Signup
             </Link>
@@ -84,6 +93,8 @@ function Login() {
         </form>
       </div>
       <Toaster />
+      {/* Laoading  */}
+      {isLoding ? <Loading /> : ""}
     </div>
   );
 }

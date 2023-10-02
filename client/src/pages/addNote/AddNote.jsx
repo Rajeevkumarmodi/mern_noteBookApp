@@ -2,18 +2,22 @@ import React, { useState } from "react";
 import Layout from "../../components/layout/Layout";
 import toast, { Toaster } from "react-hot-toast";
 
+// ============================add note page============================
 function AddNote() {
   const [noteValue, setNoteValue] = useState({
     title: "",
     description: "",
   });
 
+  // ===============================changeHandler function===============================
   function changeHandler(e) {
     const name = e.target.name;
     const value = e.target.value;
 
     setNoteValue({ ...noteValue, [name]: value });
   }
+
+  // ===============================add note function===============================
 
   async function addNote() {
     const { title, description } = noteValue;
@@ -42,6 +46,7 @@ function AddNote() {
       }
     }
   }
+
   return (
     <div>
       <Layout>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
 import toast, { Toaster } from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
+// ==================================update page==================================
 function UpdateNote() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [inputValue, setInputVale] = useState({
@@ -11,10 +13,14 @@ function UpdateNote() {
     description: "",
   });
 
+  // ===============================changeHandler function ===============================
+
   function changeHandler(e) {
     const { name, value } = e.target;
     setInputVale({ ...inputValue, [name]: value });
   }
+
+  // ===========================fetch note data function===========================
 
   async function fetchNoteData() {
     const res = await fetch(`http://localhost:8080/api/note/updatenote/${id}`, {
@@ -33,6 +39,8 @@ function UpdateNote() {
     const { title, description } = resData;
     setInputVale({ title: title, description: description });
   }
+
+  // ========================call fetch note data function========================
 
   useEffect(() => {
     fetchNoteData();
@@ -59,6 +67,7 @@ function UpdateNote() {
         toast.error(data.error);
       } else {
         toast(data);
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

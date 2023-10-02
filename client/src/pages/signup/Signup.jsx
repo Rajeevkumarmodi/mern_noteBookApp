@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import MyContext from "../../context/myContext";
+import { useContext } from "react";
+import Loading from "../../components/loading/Loading";
+
+// =====================================signup page=====================================
 
 function Signup() {
+  const { isLoading, setIsLoading } = useContext(MyContext);
   const navigate = useNavigate();
 
   const [inputValue, setInputValue] = useState({
@@ -11,12 +17,16 @@ function Signup() {
     password: "",
   });
 
+  // ==============================changeHandler function==============================
+
   function changeHandler(e) {
     const name = e.target.name;
     const value = e.target.value;
 
     setInputValue({ ...inputValue, [name]: value });
   }
+
+  // ===================================signup function===================================
 
   async function signUp(e) {
     e.preventDefault();
@@ -26,6 +36,7 @@ function Signup() {
       toast.error("All fields are required");
     } else {
       try {
+        setIsLoading(true);
         const res = await fetch("http://localhost:8080/api/auth/signup", {
           method: "POST",
           headers: {
@@ -37,8 +48,8 @@ function Signup() {
         const signupData = await res.json();
         if (signupData.success) {
           toast.success(signupData.success);
+          setIsLoading(false);
           setTimeout(() => navigate("/login"), 250);
-          // navigate("/login");
         } else {
           toast.error(signupData.error);
         }
@@ -85,7 +96,7 @@ function Signup() {
             Signup
           </button>
           <p>
-            I have a account{" "}
+            I have an account{" "}
             <Link to="/login" className=" font-bold text-green-600">
               Login
             </Link>
@@ -93,6 +104,10 @@ function Signup() {
         </form>
       </div>
       <Toaster />
+
+      {/* loading effect */}
+
+      {isLoading ? <Loading /> : ""}
     </div>
   );
 }
