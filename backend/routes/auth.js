@@ -5,8 +5,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config.js";
 import fetchUser from "../middleware/authentication.js";
+import Note from "../models/note.js";
 
-// signup router
+// =========================signup router=========================
 
 router.post("/signup", async (req, res) => {
   console.log(req.body);
@@ -26,12 +27,12 @@ router.post("/signup", async (req, res) => {
     // get single user
     const user = await User.findOne({ email });
 
-    // check user already present or not
+    //check user already present or not
 
     if (user) {
       res.status(400).json({ error: "User already exists" });
     } else {
-      // hash password
+      // =================hash password=================
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -45,7 +46,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// login router
+// ====================================login router====================================
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -80,7 +81,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// get user router
+// ===================================get user router===================================
 
 router.get("/getuser", fetchUser, async (req, res) => {
   try {
@@ -95,4 +96,25 @@ router.get("/getuser", fetchUser, async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
+// delete user and all notes
+
+router.delete("/deleteuser", fetchUser, async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const user = User.findOne({ _id: userId });
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    } else {
+      const note = await Note.deleteMany({ user: userId });
+      const deleteUser = await User.deleteOne({ _id: userId });
+      res.status(200).json({ success: "User deleted successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export default router;
