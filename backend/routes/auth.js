@@ -69,7 +69,7 @@ router.post("/login", async (req, res) => {
 
     if (doMatch) {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "2d",
+        expiresIn: "30s",
       });
       res.status(201).json({ token, success: "Login successfully" });
     } else {
@@ -85,12 +85,15 @@ router.post("/login", async (req, res) => {
 
 router.get("/getuser", fetchUser, async (req, res) => {
   try {
-    console.log(req.userId);
     const userId = req.userId;
-    console.log("getuser Id", userId);
-    const user = await User.findById(userId).select("-password");
-    res.send(user);
-    console.log("getuser", user);
+    if (!userId) {
+      res.status(400).json({ error: "token expired please login again " });
+    } else {
+      console.log("getuser Id", userId);
+      const user = await User.findById(userId).select("-password");
+      res.send(user);
+      console.log("getuser", user);
+    }
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal server error");
@@ -103,13 +106,17 @@ router.delete("/deleteuser", fetchUser, async (req, res) => {
   const userId = req.userId;
 
   try {
-    const user = User.findOne({ _id: userId });
-    if (!user) {
-      return res.status(400).json({ error: "User not found" });
+    if (!userId) {
+      res.status(400).json({ error: "token expired please login again " });
     } else {
-      const note = await Note.deleteMany({ user: userId });
-      const deleteUser = await User.deleteOne({ _id: userId });
-      res.status(200).json({ success: "User deleted successfully" });
+      const user = User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(400).json({ error: "User not found" });
+      } else {
+        const note = await Note.deleteMany({ user: userId });
+        const deleteUser = await User.deleteOne({ _id: userId });
+        res.status(200).json({ success: "User deleted successfully" });
+      }
     }
   } catch (error) {
     console.log(error);
