@@ -39,7 +39,10 @@ function Login() {
           },
           body: JSON.stringify({ email, password }),
         });
-
+        setInputValue({
+          email: "",
+          password: "",
+        });
         const loginData = await res.json();
         if (loginData.success) {
           toast.success(loginData.success);

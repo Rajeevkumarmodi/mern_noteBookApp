@@ -44,7 +44,11 @@ function Signup() {
           },
           body: JSON.stringify({ name, email, password }),
         });
-
+        setInputValue({
+          name: "",
+          email: "",
+          password: "",
+        });
         const signupData = await res.json();
         if (signupData.success) {
           toast.success(signupData.success);
@@ -52,6 +56,7 @@ function Signup() {
           setTimeout(() => navigate("/login"), 250);
         } else {
           toast.error(signupData.error);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(error);
