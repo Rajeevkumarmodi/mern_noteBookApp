@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
 import NoteCard from "../../components/noteCard/NoteCard";
 import MyContext from "../../context/myContext";
@@ -7,6 +8,7 @@ import Loading from "../../components/loading/Loading";
 // =============================Home page=============================
 
 function Home() {
+  const navigate = useNavigate();
   const { allNotesData, getAllNotes, isLoading, setIsLoading } =
     useContext(MyContext);
 

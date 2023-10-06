@@ -16,14 +16,39 @@ function App() {
       <ContextProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={token ? <Home /> : <Login />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={token ? <Profile /> : <Login />} />
-            <Route path="/addnote" element={token ? <AddNote /> : <NoPage />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/addnote"
+              element={
+                <ProtectedRoute>
+                  <AddNote />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/updatenote/:id"
-              element={token ? <UpdateNote /> : <Login />}
+              element={
+                <ProtectedRoute>
+                  <UpdateNote />
+                </ProtectedRoute>
+              }
             />
             <Route path="/*" element={<NoPage />} />
           </Routes>
@@ -34,3 +59,12 @@ function App() {
 }
 
 export default App;
+
+export const ProtectedRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    return children;
+  } else {
+    return <Navigate to={"/login"} />;
+  }
+};

@@ -12,8 +12,9 @@ function ManuBar() {
   // ========================logout function========================
   function logout() {
     localStorage.removeItem("token");
-    navigator("/login");
+    navigate("/login");
   }
+
   return (
     <div className=" absolute right-0 w-[200px] bg-slate-400 h-[100vh] flex flex-col gap-7 justify-center items-center ">
       <Link to="/" className="flex gap-3">

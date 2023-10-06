@@ -13,6 +13,5 @@ app.use(cors());
 app.use("/api/auth", auth);
 app.use("/api/note", note);
 
-app.listen(process.env.PORT || 8001, () =>
-  console.log("server is ready to run")
-);
+const PORT = process.env.PORT || 8001;
+app.listen(PORT, () => console.log(`server is listening on port ${PORT}`));

@@ -8,7 +8,16 @@ const fetchUser = async (req, res, next) => {
   }
 
   try {
-    const { userId } = await Jwt.verify(token, process.env.JWT_SECRET);
+    const { userId } = await Jwt.verify(
+      token,
+      process.env.JWT_SECRET,
+      (err, res) => {
+        if (err) {
+          return "token expired";
+        }
+        return res;
+      }
+    );
     req.userId = userId;
     console.log("fetchuser", userId);
     next();

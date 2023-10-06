@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FcManager } from "react-icons/fc";
-import Loding from "../../components/loading/Loading";
+import toast, { Toaster } from "react-hot-toast";
+
+import Loading from "../../components/loading/Loading";
 
 import Layout from "../../components/layout/Layout";
 import MyContext from "../../context/myContext";
@@ -8,13 +11,14 @@ import MyContext from "../../context/myContext";
 // =======================================profile page==========================================
 
 function Profile() {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState("");
-  const { isLoding, setIsLoding } = useContext(MyContext);
+  const { isLoading, setIsLoading } = useContext(MyContext);
 
   // ============================fetch user============================
 
   async function fetchUser() {
-    setIsLoding(true);
+    setIsLoading(true);
     const res = await fetch("http://localhost:8080/api/auth/getuser", {
       method: "GET",
       headers: {
@@ -23,10 +27,44 @@ function Profile() {
       },
     });
 
-    setUserData(await res.json());
-    setIsLoding(false);
+    const serverResponse = await res.json();
+    if (serverResponse.error) {
+      toast.error(serverResponse.error);
+      localStorage.removeItem("token");
+      setTimeout(() => navigate("/login"), 500);
+      navigate("/login");
+      setIsLoading(false);
+    } else {
+      setUserData(serverResponse);
+      setIsLoading(false);
+    }
   }
 
+  // ======================================delete user======================================
+
+  async function deleteUser() {
+    try {
+      const res = await fetch("http://localhost:8080/api/auth/deleteuser", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      });
+
+      const serverResponse = await res.json();
+      console.log(serverResponse);
+
+      if (serverResponse.error) {
+        toast.error(serverResponse.error);
+      } else {
+        toast.success(serverResponse.success);
+        setTimeout(() => navigate("/login"), 500);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   // =============================call fetch user function=============================
 
   useEffect(() => {
@@ -37,8 +75,8 @@ function Profile() {
     <div>
       <Layout>
         <div>
-          {isLoding ? (
-            <Loding />
+          {isLoading ? (
+            <Loading />
           ) : (
             <div>
               <FcManager className=" text-[150px]" />
@@ -48,7 +86,10 @@ function Profile() {
               <h3 className=" text-xl">Email :- {userData.email}</h3>
               <h3 className=" text-xl">ID :- {userData._id}</h3>
               <div className=" my-[30px]">
-                <button className=" px-3 py-2 bg-blue-500 rounded-lg text-white">
+                <button
+                  onClick={deleteUser}
+                  className=" px-3 py-2 bg-blue-500 rounded-lg text-white"
+                >
                   Delete Account
                 </button>
               </div>
@@ -56,6 +97,7 @@ function Profile() {
           )}
         </div>
       </Layout>
+      <Toaster />
     </div>
   );
 }

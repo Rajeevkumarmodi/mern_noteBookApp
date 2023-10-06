@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { BiSolidEdit } from "react-icons/bi";
 import { Link } from "react-router-dom";
@@ -23,6 +24,7 @@ function NoteCard(props) {
           />
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

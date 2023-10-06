@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
 import toast, { Toaster } from "react-hot-toast";
 
 // ============================add note page============================
 function AddNote() {
+  const navigate = useNavigate();
   const [noteValue, setNoteValue] = useState({
     title: "",
     description: "",
@@ -35,6 +37,7 @@ function AddNote() {
       });
 
       const addNoteRespose = await res.json();
+
       if (addNoteRespose.success) {
         toast.success(addNoteRespose.success);
         setNoteValue({
@@ -42,7 +45,9 @@ function AddNote() {
           description: "",
         });
       } else {
-        console.log(addNoteRespose);
+        toast.error(addNoteRespose.error);
+        setTimeout(() => navigator("/login"), 500);
+        localStorage.removeItem("token");
       }
     }
   }

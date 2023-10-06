@@ -19,8 +19,16 @@ function ContextProvider({ children }) {
           "auth-token": localStorage.getItem("token"),
         },
       });
-      setAllNotesData(await res.json());
-      setIsLoading(false);
+      const serverResponse = await res.json();
+
+      if (serverResponse.error) {
+        toast.error(serverResponse.error);
+        localStorage.removeItem("token");
+        setIsLoading(false);
+      } else {
+        setAllNotesData(serverResponse);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -40,6 +48,7 @@ function ContextProvider({ children }) {
         }
       );
       const deleteData = await res.json();
+      console.log(deleteData);
       if (deleteData.error) {
         toast.error(deleteData.error);
       } else {

@@ -6,7 +6,7 @@ import MyContext from "../../context/myContext";
 
 // ===============================login page===============================
 function Login() {
-  const { isLoding, setIsLoding } = useContext(MyContext);
+  const { isLoading, setIsLoading } = useContext(MyContext);
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: "",
@@ -25,13 +25,13 @@ function Login() {
   // ================================login function================================
   async function login(e) {
     e.preventDefault();
-    const { name, email, password } = inputValue;
+    const { email, password } = inputValue;
 
     if (!email || !password) {
       toast.error("All fields are required");
     } else {
       try {
-        setIsLoding(true);
+        setIsLoading(true);
         const res = await fetch("http://localhost:8080/api/auth/login", {
           method: "POST",
           headers: {
@@ -44,11 +44,11 @@ function Login() {
         if (loginData.success) {
           toast.success(loginData.success);
           navigate("/");
-          localStorage.setItem("token", loginData.token);
-          setIsLoding(false);
+          localStorage.setItem("token", loginData.token, {});
+          setIsLoading(false);
         } else {
           toast.error(loginData.error);
-          setIsLoding(false);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(error);
@@ -94,7 +94,7 @@ function Login() {
       </div>
       <Toaster />
       {/* Laoading  */}
-      {isLoding ? <Loading /> : ""}
+      {isLoading ? <Loading /> : ""}
     </div>
   );
 }
