@@ -48,7 +48,6 @@ function UpdateNote() {
 
   async function updateNote() {
     const { title, description } = inputValue;
-    console.log(id);
     try {
       const res = await fetch(
         `http://localhost:8080/api/note/updatenote/${id}`,
@@ -66,7 +65,7 @@ function UpdateNote() {
       if (data.error) {
         toast.error(data.error);
       } else {
-        toast(data);
+        toast.success(data.success);
         navigate("/");
       }
     } catch (error) {

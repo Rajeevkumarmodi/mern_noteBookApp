@@ -48,12 +48,13 @@ function ContextProvider({ children }) {
         }
       );
       const deleteData = await res.json();
+
       console.log(deleteData);
-      if (deleteData.error) {
-        toast.error(deleteData.error);
-      } else {
+      if (deleteData.success) {
         toast.success(deleteData.success);
         getAllNotes();
+      } else {
+        toast.error(deleteData.error);
       }
     } catch (error) {
       console.log(error);

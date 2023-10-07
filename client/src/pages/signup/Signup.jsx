@@ -51,9 +51,10 @@ function Signup() {
         });
         const signupData = await res.json();
         if (signupData.success) {
-          toast.success(signupData.success);
           setIsLoading(false);
-          setTimeout(() => navigate("/login"), 250);
+          // setTimeout(() => navigate("/login"), 250);
+          navigate("/login");
+          toast.success(signupData.success);
         } else {
           toast.error(signupData.error);
           setIsLoading(false);

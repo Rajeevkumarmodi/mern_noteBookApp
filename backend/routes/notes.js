@@ -11,7 +11,7 @@ router.get("/fetchallnotes", fetchUser, async (req, res) => {
     } else {
       // fetch notes
       const notes = await Note.find({ user: req.userId });
-      console.log("notes", notes);
+      // console.log("notes", notes);
       if (!notes) {
         res.status(200).send("Notes Not Found");
       } else {
@@ -63,7 +63,7 @@ router.get("/updatenote/:id", fetchUser, async (req, res) => {
         return res.send({ error: "Not allowed" });
       }
 
-      res.send(note);
+      res.status(200).send(note);
     }
   } catch (error) {
     console.log(error);
@@ -93,7 +93,7 @@ router.patch("/updatenote/:id", fetchUser, async (req, res) => {
         { _id: id },
         { $set: { title, description } }
       );
-      res.json("Note update successfully 👍");
+      res.json("Note updated successfully 👍");
     }
   } catch (error) {
     console.log(error);
@@ -120,7 +120,7 @@ router.delete("/deletenote/:id", fetchUser, async (req, res) => {
 
       const deleteNote = await Note.deleteOne({ _id: id });
 
-      res.json({ Success: "Note has been deleted", note: deleteNote });
+      res.json({ success: "Note has been deleted" });
     }
   } catch (error) {
     console.log(error);

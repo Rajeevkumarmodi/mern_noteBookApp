@@ -53,7 +53,6 @@ function Profile() {
       });
 
       const serverResponse = await res.json();
-      console.log(serverResponse);
 
       if (serverResponse.error) {
         toast.error(serverResponse.error);

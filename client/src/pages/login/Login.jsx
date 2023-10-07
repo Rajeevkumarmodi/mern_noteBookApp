@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
+// import { ToastContainer, toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../components/loading/Loading";
 import MyContext from "../../context/myContext";
@@ -14,7 +15,6 @@ function Login() {
   });
 
   // ==============================changeHandler function==============================
-
   function changeHandler(e) {
     const name = e.target.name;
     const value = e.target.value;
