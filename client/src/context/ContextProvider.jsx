@@ -12,13 +12,16 @@ function ContextProvider({ children }) {
   async function getAllNotes() {
     try {
       setIsLoading(true);
-      const res = await fetch("http://localhost:8080/api/note/fetchallnotes", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      });
+      const res = await fetch(
+        "https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/note/fetchallnotes",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
       const serverResponse = await res.json();
 
       if (serverResponse.error) {
@@ -38,7 +41,7 @@ function ContextProvider({ children }) {
   async function deleteNote(id) {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/note/deletenote/${id}`,
+        `https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/note/deletenote/${id}`,
         {
           method: "DELETE",
           headers: {

@@ -23,13 +23,16 @@ function UpdateNote() {
   // ===========================fetch note data function===========================
 
   async function fetchNoteData() {
-    const res = await fetch(`http://localhost:8080/api/note/updatenote/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const res = await fetch(
+      `https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/note/updatenote/${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
     const resData = await res.json();
 
     if (resData.error) {
@@ -50,7 +53,7 @@ function UpdateNote() {
     const { title, description } = inputValue;
     try {
       const res = await fetch(
-        `http://localhost:8080/api/note/updatenote/${id}`,
+        `https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/note/updatenote/${id}`,
         {
           method: "PATCH",
           headers: {

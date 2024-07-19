@@ -27,14 +27,17 @@ function AddNote() {
     if (!title || !description) {
       toast.error("All fields are required❌😠");
     } else {
-      const res = await fetch("http://localhost:8080/api/note/addnote", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-        body: JSON.stringify({ title, description }),
-      });
+      const res = await fetch(
+        "https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/note/addnote",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+          body: JSON.stringify({ title, description }),
+        }
+      );
 
       const addNoteRespose = await res.json();
 

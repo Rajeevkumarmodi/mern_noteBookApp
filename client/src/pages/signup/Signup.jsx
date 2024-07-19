@@ -37,13 +37,16 @@ function Signup() {
     } else {
       try {
         setIsLoading(true);
-        const res = await fetch("http://localhost:8080/api/auth/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, email, password }),
-        });
+        const res = await fetch(
+          "https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/auth/signup",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email, password }),
+          }
+        );
         setInputValue({
           name: "",
           email: "",

@@ -19,13 +19,16 @@ function Profile() {
 
   async function fetchUser() {
     setIsLoading(true);
-    const res = await fetch("http://localhost:8080/api/auth/getuser", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": localStorage.getItem("token"),
-      },
-    });
+    const res = await fetch(
+      "https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/auth/getuser",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
 
     const serverResponse = await res.json();
     if (serverResponse.error) {
@@ -44,13 +47,16 @@ function Profile() {
 
   async function deleteUser() {
     try {
-      const res = await fetch("http://localhost:8080/api/auth/deleteuser", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "auth-token": localStorage.getItem("token"),
-        },
-      });
+      const res = await fetch(
+        "https://mern-e-note-kak418icj-rajeev-kumars-projects.vercel.app/api/auth/deleteuser",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
 
       const serverResponse = await res.json();
 
